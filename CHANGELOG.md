@@ -8,6 +8,25 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 
 ## [Unreleased]
 
+### Changed
+- `calcularDisponibilidade`: fonte de verdade passa a ser exclusivamente o cruzamento
+  Frota × Reservas (Reservas Futuras + Contratos Abertos) no período. Status físico do
+  veículo (LOCADO/NO_LAVADOR/MANUTENCAO/limpo) não entra mais no cálculo de disponibilidade
+  — continua existindo em `frota_veiculos` só para as telas operacionais do pátio.
+- Retorno de `calcularDisponibilidade` inclui `overbooking`, `overbooking_categoria` e
+  `overbooking_qtd` — predição de excesso de reservas sobre a frota cadastrada.
+- Aba Importação: novo campo de upload "Frota (CSV)", que passa a ser a fonte de verdade
+  da contagem de veículos por categoria (upsert por placa).
+
+### Fixed
+- Importação: subir só a Frota (ou só um dos dois outros CSVs) não encerra mais
+  contratos/reservas do tipo que não foi reenviado nesta sincronização.
+- `calcularDisponibilidade`: contratos com placa ainda não cadastrada na Frota importada
+  agora contam como vaga genérica, eliminando divergência entre o card agregado e a lista
+  detalhada por veículo.
+- Linhas malformadas no CSV de Frota (sem placa ou categoria) são descartadas em vez de
+  gravar um veículo "invisível" nas contagens.
+
 ---
 
 ## [1.3.0] — 2026-06-28
